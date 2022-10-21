@@ -29,9 +29,8 @@ menubar = Menu(window)
 filemenu = Menu(menubar, tearoff=0)
 filemenu = Menu(menubar, tearoff=0)
 filemenu.add_command(label="Open", command=askOpenFile)
-
+filemenu.add_command(label="Salvar", command=donothing)
 filemenu.add_separator()
-
 filemenu.add_command(label="Exit", command=window.quit)
 menubar.add_cascade(label="File", menu=filemenu)
 editmenu = Menu(menubar, tearoff=0)
@@ -40,6 +39,7 @@ window.config(menu=menubar)
 
 TableMargin = Frame(window, width=500)
 TableMargin.pack(side=TOP)
+
 scrollbarx = Scrollbar(TableMargin, orient=HORIZONTAL)
 scrollbary = Scrollbar(TableMargin, orient=VERTICAL)
 tree = ttk.Treeview(TableMargin, columns=("Comment", "K2O", "TiO2", "FeO", "MnO", "CaO", "Cr2O3", "Al2O3", "SiO2", "MgO", "Total", "Date")
@@ -48,6 +48,7 @@ scrollbary.config(command=tree.yview)
 scrollbary.pack(side=RIGHT, fill=Y)
 scrollbarx.config(command=tree.xview)
 scrollbarx.pack(side=BOTTOM, fill=X)
+
 tree.heading('Comment', text="Comment", anchor=W)
 tree.heading('K2O', text="K2O", anchor=W)
 tree.heading('TiO2', text="TiO2", anchor=W)
@@ -60,7 +61,6 @@ tree.heading('SiO2', text="SiO2", anchor=W)
 tree.heading('MgO', text="MgO", anchor=W)
 tree.heading('Total', text="Total", anchor=W)
 tree.heading('Date', text="Date", anchor=W)
-
 tree.column('#0', stretch=NO, minwidth=0, width=0)
 tree.column('#1', stretch=NO, minwidth=200, width=250)
 tree.column('#2', stretch=NO, minwidth=50, width=50)
@@ -73,7 +73,6 @@ tree.column('#8', stretch=NO, minwidth=50, width=50)
 tree.column('#9', stretch=NO, minwidth=50, width=50)
 tree.column('#10', stretch=NO, minwidth=50, width=50)
 tree.column('#11', stretch=NO, minwidth=50, width=50)
-
 tree.pack()
 
 with open('dados.csv') as f:
