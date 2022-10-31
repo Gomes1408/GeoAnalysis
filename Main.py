@@ -6,8 +6,8 @@ import csv
 
 window=Tk() 
 
-width = 1900
-height = 1000
+width = 1000
+height = 600
 screen_width = window.winfo_screenwidth()
 screen_height = window.winfo_screenheight()
 x = (screen_width/2) - (width/2)
@@ -15,26 +15,49 @@ y = (screen_height/2) - (height/2)
 window.geometry("%dx%d+%d+%d" % (width, height, x, y))
 window.resizable(0, 0)
 
-def donothing():
-   filewin = Toplevel(window)
-   button = Button(filewin, text="Do nothing button")
-   button.pack()
 
-def askOpenFile(self):
-        data = fd.askopenfile(title='Abrir arquivo de projeto', initialdir='/', filetypes = (('text files', '*.csv'),('All files', '*.*')))
-    
+def askOpenFile():
+        data = fd.askopenfilename(title='Abrir arquivo de projeto', initialdir='/', filetypes = (("Csv Files", '*.csv'),('All files', '*.*')))
+        with open(data) as f:
+            reader = csv.DictReader(f, delimiter=';')
+            for row in reader:
+                Comment = row['Comment']
+                K2O = row['K2O']
+                TiO2 = row['TiO2']
+                FeO = row['FeO']
+                MnO = row['MnO']
+                CaO = row['CaO']
+                Cr2O3 = row['Cr2O3']
+                Al2O3 = row['Al2O3']
+                SiO2 = row['SiO2']
+                MgO = row['MgO']
+                Total = row['Total']
+                Date = row['Date']
+                tree.insert("", 0, values=(Comment, K2O, TiO2, FeO, MnO, CaO, Cr2O3, Al2O3, SiO2, MgO, Total, Date))
+
+def saveOpenFile():
+    filePath = fd.asksaveasfilename(title='Salvar arquivo de projeto', initialdir='/', filetypes = (("Csv Files", '*.csv'),('All files', '*.*')))
+
+    filePath = filePath + ".csv"
+
+    newFile = open(filePath, 'w', encoding="utf-8", newline='')
+
+    fieldnames= ['Comment', 'K2O', 'TiO2', 'FeO', 'MnO', 'CaO', 'Cr2O3', 'Al2O3', 'SiO2', 'MgO', 'Total', 'Date']
+    writer = csv.DictWriter(newFile, fieldnames=fieldnames, delimiter=';')
+    writer.writeheader()
+    #writer.writerows(data)
+    newFile.close()
 
 
 menubar = Menu(window)
 filemenu = Menu(menubar, tearoff=0)
 filemenu = Menu(menubar, tearoff=0)
 filemenu.add_command(label="Open", command=askOpenFile)
-filemenu.add_command(label="Salvar", command=donothing)
+filemenu.add_command(label="Save", command=saveOpenFile)
 filemenu.add_separator()
 filemenu.add_command(label="Exit", command=window.quit)
 menubar.add_cascade(label="File", menu=filemenu)
 editmenu = Menu(menubar, tearoff=0)
-editmenu.add_command(label="Undo", command=donothing)
 window.config(menu=menubar)
 
 TableMargin = Frame(window, width=500)
@@ -42,8 +65,9 @@ TableMargin.pack(side=TOP)
 
 scrollbarx = Scrollbar(TableMargin, orient=HORIZONTAL)
 scrollbary = Scrollbar(TableMargin, orient=VERTICAL)
-tree = ttk.Treeview(TableMargin, columns=("Comment", "K2O", "TiO2", "FeO", "MnO", "CaO", "Cr2O3", "Al2O3", "SiO2", "MgO", "Total", "Date")
-, height=600, selectmode="extended", yscrollcommand=scrollbary.set, xscrollcommand=scrollbarx.set)
+tree = ttk.Treeview(TableMargin, columns=("Comment", "K2O", "TiO2", "FeO", "MnO", "CaO", "Cr2O3", "Al2O3", "SiO2", "MgO", "Total", "Date"), 
+height=600, selectmode="extended", yscrollcommand=scrollbary.set, xscrollcommand=scrollbarx.set)
+
 scrollbary.config(command=tree.yview)
 scrollbary.pack(side=RIGHT, fill=Y)
 scrollbarx.config(command=tree.xview)
@@ -75,25 +99,7 @@ tree.column('#10', stretch=NO, minwidth=50, width=50)
 tree.column('#11', stretch=NO, minwidth=50, width=50)
 tree.pack()
 
-with open('dados.csv') as f:
-    reader = csv.DictReader(f, delimiter=';')
-    for row in reader:
-        Comment = row['Comment']
-        K2O = row['K2O']
-        TiO2 = row['TiO2']
-        FeO = row['FeO']
-        MnO = row['MnO']
-        CaO = row['CaO']
-        Cr2O3 = row['Cr2O3']
-        Al2O3 = row['Al2O3']
-        SiO2 = row['SiO2']
-        MgO = row['MgO']
-        Total = row['Total']
-        Date = row['Date']
-        tree.insert("", 0, values=(Comment, K2O, TiO2, FeO, MnO, CaO, Cr2O3, Al2O3, SiO2, MgO, Total, Date))
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     window.mainloop()
-
-
-
