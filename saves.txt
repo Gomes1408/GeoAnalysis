@@ -1,0 +1,17 @@
+def fileReader(data):
+    with open(data) as f:
+            reader = csv.DictReader(f, delimiter=';')
+            for row in reader:
+                Comment = row['Comment']
+                K2O = row['K2O']
+                TiO2 = row['TiO2']
+                FeO = row['FeO']
+                MnO = row['MnO']
+                CaO = row['CaO']
+                Cr2O3 = row['Cr2O3']
+                Al2O3 = row['Al2O3']
+                SiO2 = row['SiO2']
+                MgO = row['MgO']
+                Total = row['Total']
+                Date = row['Date']
+                tree.insert("", 0, values=(Comment, K2O, TiO2, FeO, MnO, CaO, Cr2O3, Al2O3, SiO2, MgO, Total, Date))
