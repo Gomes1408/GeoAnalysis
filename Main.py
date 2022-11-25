@@ -14,8 +14,8 @@ window=tk.Tk()
 
 meta = DataClass
 
-width = 1000
-height = 600
+width = 1400
+height = 700
 screen_width = window.winfo_screenwidth()
 screen_height = window.winfo_screenheight()
 x = (screen_width/2) - (width/2)
@@ -23,7 +23,9 @@ y = (screen_height/2) - (height/2)
 window.geometry("%dx%d+%d+%d" % (width, height, x, y))
 window.resizable(0, 0)
 frame1 = tk.LabelFrame(window, text="Excel Data")
-frame1.place(height=400, width=1000)
+frame1.place(height=400, width=1400)
+frame2 = tk.LabelFrame(window, text="Calculations")
+frame2.place(height=300, width=1400, y=400)
 
 
 
@@ -75,6 +77,17 @@ treescrollx = tk.Scrollbar(frame1, orient="horizontal", command=tree.xview)
 tree.configure(xscrollcommand=treescrollx.set, yscrollcommand=treescrolly.set) 
 treescrollx.pack(side="bottom", fill="x") 
 treescrolly.pack(side="right", fill="y")
+
+
+tree2 = ttk.Treeview(frame2)
+tree2.place(relheight=1, relwidth=1)
+
+treescrolly2 = tk.Scrollbar(frame2, orient="vertical", command=tree2.yview) 
+treescrollx2 = tk.Scrollbar(frame2, orient="horizontal", command=tree2.xview) 
+tree2.configure(xscrollcommand=treescrollx2.set, yscrollcommand=treescrolly2.set) 
+treescrollx2.pack(side="bottom", fill="x") 
+treescrolly2.pack(side="right", fill="y")
+
 
 if __name__ == "__main__":
     window.mainloop()
