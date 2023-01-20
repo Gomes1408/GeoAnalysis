@@ -13,6 +13,7 @@ class DataClass:
 window=tk.Tk() 
 
 meta = DataClass
+path = 'oi'
 
 width = 1400
 height = 700
@@ -28,9 +29,180 @@ frame2 = tk.LabelFrame(window, text="Calculations")
 frame2.place(height=300, width=1400, y=400)
 
 
+def calculos(path):
+    
+    nO = 12.00
+    mCat = {'K2O','TiO2','FeO','MnO','CaO','Cr2O3','Na2O','Al2O3','SiO2','MgO','Total'}
+    mOxy = {'K2O','TiO2','FeO','MnO','CaO','Cr2O3','Na2O','Al2O3','SiO2','MgO','Total'}
+    nCat = {'K2O','TiO2','FeO','MnO','CaO','Cr2O3','Na2O','Al2O3','SiO2','MgO','Total'}
+    nOxy = {'K2O','TiO2','FeO','MnO','CaO','Cr2O3','Na2O','Al2O3','SiO2','MgO','Total'}
+    norm = {'K2O','TiO2','FeO','MnO','CaO','Cr2O3','Na2O','Al2O3','SiO2','MgO','Total'}
+    diag = {'XMg','XFe','XMn','Xca'}
+    triplot = {'XMg', 'XCa', 'XFM'}
+    sig = {'X', 'Y'}
+
+
+    data = pd.read_csv(path, delimiter=';')
+
+    for x in range(len(data)):
+        totalMCat = 0
+        totalMOxy = 0
+        totalNCat = 0
+        totalNOxy = 0
+        totalNorm = 0
+
+#Calculo Molecular Cátion
+        mCat('SiO2').append(data('SiO2')[x]/60.0843)
+        totalMCat += data('SiO2')[x]/60.0843
+
+        mCat('TiO2').append(data('TiO2')[x]/79.8988)
+        totalMCat += data('TiO2')[x]/79.8988
+        
+        mCat('Al2O3').append(2*data('Al2O3')[x]/101.9613)
+        totalMCat += 2*data('Al2O3')[x]/101.9613
+        
+        mCat('Cr2O3').append(2*data('Cr2O3')[x]/151.9902)
+        totalMCat += 2*data('Cr2O3')[x]/151.9902
+        
+        mCat('FeO').append(data('FeO')[x]/71.8464)
+        totalMCat += data('FeO')[x]/71.8464
+        
+        mCat('MnO').append(data('MnO')[x]/70.9374)
+        totalMCat += data('MnO')[x]/70.9374
+        
+        mCat('MgO').append(data('MgO')[x]/40.3044)
+        totalMCat += data('MgO')[x]/40.3044
+        
+        mCat('CaO').append(data('CaO')[x]/56.0794)
+        totalMCat += data('CaO')[x]/56.0794
+       
+        mCat('K2O').append(data('K2O')[x]/39.0983)
+        totalMCat += data('K2O')[x]/39.0983
+       
+        mCat('Na2O').append(2*data('Na2O')[x]/22.989769)
+        totalMCat += 2*data('Na2O')[x]/22.989769
+
+        mCat('Total').append(totalMCat)
+
+
+#Calculo Molecular Oxigênio
+        mOxy('SiO2').append(2*data('SiO2')[x]/60.0843)
+        totalMOxy += 2*data('SiO2')[x]/60.0843
+
+        mOxy('TiO2').append(2*data('TiO2')[x]/79.8988)
+        totalMOxy += 2*data('TiO2')[x]/79.8988
+        
+        mOxy('Al2O3').append(3*data('Al2O3')[x]/101.9613)
+        totalMOxy += 3*data('Al2O3')[x]/101.9613
+        
+        mOxy('Cr2O3').append(3*data('Cr2O3')[x]/151.9902)
+        totalMOxy += 3*data('Cr2O3')[x]/151.9902
+        
+        mOxy('FeO').append(data('FeO')[x]/71.8464)
+        totalMOxy += data('FeO')[x]/71.8464
+        
+        mOxy('MnO').append(data('MnO')[x]/70.9374)
+        totalMOxy += data('MnO')[x]/70.9374
+        
+        mOxy('MgO').append(data('MgO')[x]/40.3044)
+        totalMOxy += data('MgO')[x]/40.3044
+        
+        mOxy('CaO').append(data('CaO')[x]/56.0794)
+        totalMOxy += data('CaO')[x]/56.0794
+       
+        mOxy('K2O').append(data('K2O')[x]/39.0983)
+        totalMOxy += data('K2O')[x]/39.0983
+       
+        mOxy('Na2O').append(data('Na2O')[x]/22.989769)
+        totalMOxy += data('Na2O')[x]/22.989769
+
+        mOxy('Total').append(totalMOxy)
+
+#Normalização de cations
+        nCat('SiO2').append(nO*mCat('SiO2')[x]/mOxy('SiO2')[x])
+        totalNCat += nO*mCat('SiO2')[x]/mOxy('SiO2')[x]
+
+        nCat('TiO2').append(nO*mCat('TiO2')[x]/mOxy('TiO2')[x])
+        totalNCat += nO*mCat('TiO2')[x]/mOxy('TiO2')[x]
+        
+        nCat('Al2O3').append(nO*mCat('Al2O3')[x]/mOxy('Al2O3')[x])
+        totalNCat += nO*mCat('Al2O3')[x]/mOxy('Al2O3')[x]
+        
+        nCat('Cr2O3').append(nO*mCat('Cr2O3')[x]/mOxy('Cr2O3')[x])
+        totalNCat += nO*mCat('Cr2O3')[x]/mOxy('Cr2O3')[x]
+        
+        nCat('FeO').append(nO*mCat('FeO')[x]/mOxy('FeO')[x])
+        totalNCat += nO*mCat('FeO')[x]/mOxy('FeO')[x]
+        
+        nCat('MnO').append(nO*mCat('MnO')[x]/mOxy('MnO')[x])
+        totalNCat += nO*mCat('MnO')[x]/mOxy('MnO')[x]
+        
+        nCat('MgO').append(nO*mCat('MgO')[x]/mOxy('MgO')[x])
+        totalNCat += nO*mCat('MgO')[x]/mOxy('MgO')[x]
+        
+        nCat('CaO').append(nO*mCat('CaO')[x]/mOxy('CaO')[x])
+        totalNCat += nO*mCat('CaO')[x]/mOxy('CaO')[x]
+       
+        nCat('K2O').append(nO*mCat('K2O')[x]/mOxy('K2O')[x])
+        totalNCat += nO*mCat('K2O')[x]/mOxy('K2O')[x]
+       
+        nCat('Na2O').append(nO*mCat('Na2O')[x]/mOxy('Na2O')[x])
+        totalNCat += nO*mCat('Na2O')[x]/mOxy('Na2O')[x]
+
+        nCat('Total').append(totalNCat)
+
+#Normalização de Oxigenios
+        nOxy('SiO2').append(2*nCat('SiO2')[x])
+        totalNOxy += 2*nCat('SiO2')[x]
+
+        nOxy('TiO2').append(2*nCat('TiO2')[x])
+        totalNOxy += 2*nCat('TiO2')[x]
+        
+        nOxy('Al2O3').append((3/2)*nCat('Al2O3')[x])
+        totalNOxy += (3/2)*nCat('Al2O3')[x]
+        
+        nOxy('Cr2O3').append((3/2)*nCat('Cr2O3')[x])
+        totalNOxy += (3/2)*nCat('Cr2O3')[x]
+        
+        nOxy('FeO').append(nCat('FeO')[x])
+        totalNOxy += nCat('FeO')[x]
+        
+        nOxy('MnO').append(nCat('MnO')[x])
+        totalNCat += nCat('MnO')[x]
+        
+        nOxy('MgO').append(nCat('MgO')[x])
+        totalNOxy += nCat('MgO')[x]
+        
+        nOxy('CaO').append(nCat('CaO')[x])
+        totalNOxy += nCat('CaO')[x]
+       
+        nOxy('K2O').append(2*nCat('K2O')[x])
+        totalNOxy += 2*nCat('K2O')[x]
+       
+        nOxy('Na2O').append(2*nCat('Na2O')[x])
+        totalNOxy += 2*nCat('Na2O')[x]
+
+        nOxy('Total').append(totalNOxy)
+
+#Calculo para diagramas
+        diag('XMg').append(nCat('MgO')/(nCat('MgO')+nCat('FeO')+nCat('MnO')+nCat('CaO')))
+        diag('XFe').append(nCat('XFe')/(nCat('MgO')+nCat('FeO')+nCat('MnO')+nCat('CaO')))
+        diag('XMn').append(nCat('XMn')/(nCat('MgO')+nCat('FeO')+nCat('MnO')+nCat('CaO')))
+        diag('XCa').append(nCat('XCa')/(nCat('MgO')+nCat('FeO')+nCat('MnO')+nCat('CaO')))
+
+#triplot Morton Mange
+        triplot('XMg').append(100*diag('XMg')[x])
+        triplot('XCa').append(100*diag('XCa')[x])
+        triplot('XFM').append(100*(diag('XFe')[x]+diag('XMn')))
+
+#Coordenadas para SIG
+        sig('X').append((triplot('XCa')[x]+(0.5*triplot('XMg')[x]))/100)
+        sig('Y').append((0.866*triplot('XMg')[x])/100)
+
 
 def askOpenFile():
         data = fd.askopenfilename(title='Abrir arquivo de projeto', initialdir='/', filetypes = (("Csv Files", '*.csv'),('All files', '*.*')))
+        path = data
         df = pd.read_csv(data, delimiter=';')
         meta.head = list(df.columns)
         tree["column"] = meta.head
@@ -60,13 +232,14 @@ def saveOpenFile():
 
 menubar = tk.Menu(window)
 filemenu = tk.Menu(menubar, tearoff=0)
-filemenu = tk.Menu(menubar, tearoff=0)
 filemenu.add_command(label="Open", command= lambda: askOpenFile())
 filemenu.add_command(label="Save", command= lambda: saveOpenFile())
 filemenu.add_separator()
 filemenu.add_command(label="Exit", command=window.quit)
 menubar.add_cascade(label="File", menu=filemenu)
 editmenu = tk.Menu(menubar, tearoff=0)
+mathmenu = tk.Menu(menubar, tearoff= 0)
+mathmenu.add_command(Label="Calculations", command= lambda: calculos(path))
 window.config(menu=menubar)
 
 tree = ttk.Treeview(frame1)
