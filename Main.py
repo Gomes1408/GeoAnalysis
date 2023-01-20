@@ -199,6 +199,8 @@ def calculos(path):
         sig('X').append((triplot('XCa')[x]+(0.5*triplot('XMg')[x]))/100)
         sig('Y').append((0.866*triplot('XMg')[x])/100)
 
+    return None
+
 
 def askOpenFile():
         data = fd.askopenfilename(title='Abrir arquivo de projeto', initialdir='/', filetypes = (("Csv Files", '*.csv'),('All files', '*.*')))
