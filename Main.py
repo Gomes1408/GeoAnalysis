@@ -32,11 +32,12 @@ frame2.place(height=300, width=1400, y=400)
 def calculos(path):
     
     nO = 12.00
-    mCat = {'K2O','TiO2','FeO','MnO','CaO','Cr2O3','Na2O','Al2O3','SiO2','MgO','Total'}
-    mOxy = {'K2O','TiO2','FeO','MnO','CaO','Cr2O3','Na2O','Al2O3','SiO2','MgO','Total'}
-    nCat = {'K2O','TiO2','FeO','MnO','CaO','Cr2O3','Na2O','Al2O3','SiO2','MgO','Total'}
-    nOxy = {'K2O','TiO2','FeO','MnO','CaO','Cr2O3','Na2O','Al2O3','SiO2','MgO','Total'}
-    norm = {'K2O','TiO2','FeO','MnO','CaO','Cr2O3','Na2O','Al2O3','SiO2','MgO','Total'}
+    cst = 8.00
+    mCat = {'K2O','TiO2','FeO','MnO','CaO','Cr2O3','Na2O','Al2O3','SiO2','MgO','Fe2O3','Total'}
+    mOxy = {'K2O','TiO2','FeO','MnO','CaO','Cr2O3','Na2O','Al2O3','SiO2','MgO','Fe2O3','Total'}
+    nCat = {'K2O','TiO2','FeO','MnO','CaO','Cr2O3','Na2O','Al2O3','SiO2','MgO','Fe2O3','Total','Calculado'}
+    nOxy = {'K2O','TiO2','FeO','MnO','CaO','Cr2O3','Na2O','Al2O3','SiO2','MgO','Fe2O3','Total'}
+    norm = {'K2O','TiO2','FeO','MnO','CaO','Cr2O3','Na2O','Al2O3','SiO2','MgO','Fe2O3','Total'}
     diag = {'XMg','XFe','XMn','Xca'}
     triplot = {'XMg', 'XCa', 'XFM'}
     sig = {'X', 'Y'}
@@ -82,6 +83,13 @@ def calculos(path):
         mCat('Na2O').append(2*data('Na2O')[x]/22.989769)
         totalMCat += 2*data('Na2O')[x]/22.989769
 
+        if(data('Fe2O3')[x]>0):
+                mCat('Fe2O3').append(data('Fe2O3')[x]*2/159.6922) 
+                totalMCat += data('Fe2O3')[x]*2/159.6922
+        else:
+                mCat('Fe2O3').append(0) 
+                totalMCat += 0
+
         mCat('Total').append(totalMCat)
 
 
@@ -116,40 +124,87 @@ def calculos(path):
         mOxy('Na2O').append(data('Na2O')[x]/22.989769)
         totalMOxy += data('Na2O')[x]/22.989769
 
+        if(data('Fe2O3')[x]>0):
+                mOxy('Fe2O3').append(data('Fe2O3')[x]*3/159.6922) 
+                totalMOxy += data('Fe2O3')[x]*3/159.6922
+        else:
+                mCat('Fe2O3').append(0) 
+                totalMCat += 0
+
         mOxy('Total').append(totalMOxy)
 
 #Normalização de cations
-        nCat('SiO2').append(nO*mCat('SiO2')[x]/mOxy('SiO2')[x])
-        totalNCat += nO*mCat('SiO2')[x]/mOxy('SiO2')[x]
+        if(data('Fe2O3')[x]>0):
+                nCat('SiO2').append(cst*mCat('SiO2')[x]/mOxy('Total')[x])
+                totalNCat += cst*mCat('SiO2')[x]/mOxy('Total')[x]
 
-        nCat('TiO2').append(nO*mCat('TiO2')[x]/mOxy('TiO2')[x])
-        totalNCat += nO*mCat('TiO2')[x]/mOxy('TiO2')[x]
+                nCat('TiO2').append(cst*mCat('TiO2')[x]/mOxy('Total')[x])
+                totalNCat += cst*mCat('TiO2')[x]/mOxy('Total')[x]
+                
+                nCat('Al2O3').append(cst*mCat('Al2O3')[x]/mOxy('Total')[x])
+                totalNCat += cst*mCat('Al2O3')[x]/mOxy('Total')[x]
+                
+                nCat('Cr2O3').append(cst*mCat('Cr2O3')[x]/mOxy('Total')[x])
+                totalNCat += cst*mCat('Cr2O3')[x]/mOxy('Total')[x]
+                
+                nCat('FeO').append(cst*mCat('FeO')[x]/mOxy('Total')[x])
+                totalNCat += cst*mCat('FeO')[x]/mOxy('Total')[x]
+                
+                nCat('MnO').append(cst*mCat('MnO')[x]/mOxy('Total')[x])
+                totalNCat += cst*mCat('MnO')[x]/mOxy('Total')[x]
+                
+                nCat('MgO').append(cst*mCat('MgO')[x]/mOxy('Total')[x])
+                totalNCat += cst*mCat('MgO')[x]/mOxy('Total')[x]
+                
+                nCat('CaO').append(cst*mCat('CaO')[x]/mOxy('Total')[x])
+                totalNCat += cst*mCat('CaO')[x]/mOxy('Total')[x]
         
-        nCat('Al2O3').append(nO*mCat('Al2O3')[x]/mOxy('Al2O3')[x])
-        totalNCat += nO*mCat('Al2O3')[x]/mOxy('Al2O3')[x]
+                nCat('K2O').append(cst*mCat('K2O')[x]/mOxy('Total')[x])
+                totalNCat += cst*mCat('K2O')[x]/mOxy('Total')[x]
         
-        nCat('Cr2O3').append(nO*mCat('Cr2O3')[x]/mOxy('Cr2O3')[x])
-        totalNCat += nO*mCat('Cr2O3')[x]/mOxy('Cr2O3')[x]
-        
-        nCat('FeO').append(nO*mCat('FeO')[x]/mOxy('FeO')[x])
-        totalNCat += nO*mCat('FeO')[x]/mOxy('FeO')[x]
-        
-        nCat('MnO').append(nO*mCat('MnO')[x]/mOxy('MnO')[x])
-        totalNCat += nO*mCat('MnO')[x]/mOxy('MnO')[x]
-        
-        nCat('MgO').append(nO*mCat('MgO')[x]/mOxy('MgO')[x])
-        totalNCat += nO*mCat('MgO')[x]/mOxy('MgO')[x]
-        
-        nCat('CaO').append(nO*mCat('CaO')[x]/mOxy('CaO')[x])
-        totalNCat += nO*mCat('CaO')[x]/mOxy('CaO')[x]
-       
-        nCat('K2O').append(nO*mCat('K2O')[x]/mOxy('K2O')[x])
-        totalNCat += nO*mCat('K2O')[x]/mOxy('K2O')[x]
-       
-        nCat('Na2O').append(nO*mCat('Na2O')[x]/mOxy('Na2O')[x])
-        totalNCat += nO*mCat('Na2O')[x]/mOxy('Na2O')[x]
+                nCat('Na2O').append(cst*mCat('Na2O')[x]/mOxy('Total')[x])
+                totalNCat += cst*mCat('Na2O')[x]/mOxy('Total')[x]
 
-        nCat('Total').append(totalNCat)
+                nCat('Fe2O3').append(cst*mCat('Fe2O3')[x]/mOxy('Total')[x])
+                totalNCat += cst*mCat('Fe2O3')[x]/mOxy('Total')[x]
+
+                nCat('Total').append(totalNCat)
+        else:
+                nCat('SiO2').append(nO*mCat('SiO2')[x]/mCat('Total')[x])
+                totalNCat += nO*mCat('SiO2')[x]/mCat('Total')[x]
+
+                nCat('TiO2').append(nO*mCat('TiO2')[x]/mCat('Total')[x])
+                totalNCat += nO*mCat('TiO2')[x]/mCat('Total')[x]
+                
+                nCat('Al2O3').append(nO*mCat('Al2O3')[x]/mCat('Total')[x])
+                totalNCat += nO*mCat('Al2O3')[x]/mCat('Total')[x]
+                
+                nCat('Cr2O3').append(nO*mCat('Cr2O3')[x]/mCat('Total')[x])
+                totalNCat += nO*mCat('Cr2O3')[x]/mCat('Total')[x]
+                
+                nCat('FeO').append(nO*mCat('FeO')[x]/mCat('Total')[x])
+                totalNCat += nO*mCat('FeO')[x]/mCat('Total')[x]
+                
+                nCat('MnO').append(nO*mCat('MnO')[x]/mCat('Total')[x])
+                totalNCat += nO*mCat('MnO')[x]/mCat('Total')[x]
+                
+                nCat('MgO').append(nO*mCat('MgO')[x]/mCat('MgO')[x])
+                totalNCat += nO*mCat('MgO')[x]/mCat('Total')[x]
+                
+                nCat('CaO').append(nO*mCat('CaO')[x]/mCat('Total')[x])
+                totalNCat += nO*mCat('CaO')[x]/mCat('Total')[x]
+        
+                nCat('K2O').append(nO*mCat('K2O')[x]/mCat('Total')[x])
+                totalNCat += nO*mCat('K2O')[x]/mCat('Total')[x]
+
+                nCat('Na2O').append(nO*mCat('Na2O')[x]/mCat('Total')[x])
+                totalNCat += nO*mCat('Na2O')[x]/mCat('Total')[x]
+
+                nCat('Fe2O3').append(nO*mCat('Fe2O3')[x]/mCat('Total')[x])
+                totalNCat += nO*mCat('Fe2O3')[x]/mCat('Total')[x]
+
+                nCat('Total').append(totalNCat)
+        nCat('Calculado').append(4*(nCat('SiO2')+nCat('TiO2'))+3*(nCat('Al2O3')+nCat('Cr2O3')+nCat('Fe2O3'))+2*(nCat('FeO')+nCat('MnO')+nCat('MgO')+nCat('CaO')))
 
 #Normalização de Oxigenios
         nOxy('SiO2').append(2*nCat('SiO2')[x])
@@ -181,6 +236,9 @@ def calculos(path):
        
         nOxy('Na2O').append(2*nCat('Na2O')[x])
         totalNOxy += 2*nCat('Na2O')[x]
+
+        nOxy('Fe2O3').append((3/2)*nCat('Fe2O3')[x])
+        totalNOxy += (3/2)*nCat('Fe2O3')[x]
 
         nOxy('Total').append(totalNOxy)
 
