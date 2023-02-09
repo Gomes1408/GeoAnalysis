@@ -37,7 +37,7 @@ def calculos(path):
     mOxy = {'K2O','TiO2','FeO','MnO','CaO','Cr2O3','Na2O','Al2O3','SiO2','MgO','Fe2O3','Total'}
     nCat = {'K2O','TiO2','FeO','MnO','CaO','Cr2O3','Na2O','Al2O3','SiO2','MgO','Fe2O3','Total','Calculado'}
     nOxy = {'K2O','TiO2','FeO','MnO','CaO','Cr2O3','Na2O','Al2O3','SiO2','MgO','Fe2O3','Total'}
-    norm = {'K2O','TiO2','FeO','MnO','CaO','Cr2O3','Na2O','Al2O3','SiO2','MgO','Fe2O3','Total'}
+    atmU = {'FeO','Fe2O3'}
     diag = {'XMg','XFe','XMn','Xca'}
     triplot = {'XMg', 'XCa', 'XFM'}
     sig = {'X', 'Y'}
@@ -50,7 +50,6 @@ def calculos(path):
         totalMOxy = 0
         totalNCat = 0
         totalNOxy = 0
-        totalNorm = 0
 
 #Calculo Molecular Cátion
         mCat('SiO2').append(data('SiO2')[x]/60.0843)
@@ -128,8 +127,8 @@ def calculos(path):
                 mOxy('Fe2O3').append(data('Fe2O3')[x]*3/159.6922) 
                 totalMOxy += data('Fe2O3')[x]*3/159.6922
         else:
-                mCat('Fe2O3').append(0) 
-                totalMCat += 0
+                mOxy('Fe2O3').append(0) 
+                totalMOxy += 0
 
         mOxy('Total').append(totalMOxy)
 
@@ -204,7 +203,21 @@ def calculos(path):
                 totalNCat += nO*mCat('Fe2O3')[x]/mCat('Total')[x]
 
                 nCat('Total').append(totalNCat)
-        nCat('Calculado').append(4*(nCat('SiO2')+nCat('TiO2'))+3*(nCat('Al2O3')+nCat('Cr2O3')+nCat('Fe2O3'))+2*(nCat('FeO')+nCat('MnO')+nCat('MgO')+nCat('CaO')))
+        nCat('Calculado').append(4*(nCat('SiO2')[x]+nCat('TiO2')[x])+3*(nCat('Al2O3')[x]+nCat('Cr2O3')[x]+nCat('Fe2O3')[x])+2*(nCat('FeO')[x]+nCat('MnO')[x]+nCat('MgO')[x]+nCat('CaO')[x]))
+
+#Unidades atômicas para compostos com ferro; Fe2+ para FeO e Fe3+ para Fe2O3
+        if(data('Fe2O3')[x]>0):
+                atmU('Fe2O3').append(mOxy('Fe2O3')[x])
+        else:
+                if((24-totalNCat[x])>0):
+                        atmU('Fe2O3').append(24-totalNCat[x])
+                else:
+                        atmU('Fe2O3').append(0)
+
+        if(data('Fe2O3')[x]>0):
+                atmU('FeO').append(nCat('FeO')[x])
+        else:
+                atmU('FeO').append(atmU('Fe2O3')[x] - nCat('FeO')[x])
 
 #Normalização de Oxigenios
         nOxy('SiO2').append(2*nCat('SiO2')[x])
@@ -219,8 +232,8 @@ def calculos(path):
         nOxy('Cr2O3').append((3/2)*nCat('Cr2O3')[x])
         totalNOxy += (3/2)*nCat('Cr2O3')[x]
         
-        nOxy('FeO').append(nCat('FeO')[x])
-        totalNOxy += nCat('FeO')[x]
+        nOxy('FeO').append(atmU('FeO')[x])
+        totalNOxy += atmU('FeO')[x]
         
         nOxy('MnO').append(nCat('MnO')[x])
         totalNCat += nCat('MnO')[x]
@@ -237,16 +250,19 @@ def calculos(path):
         nOxy('Na2O').append(2*nCat('Na2O')[x])
         totalNOxy += 2*nCat('Na2O')[x]
 
-        nOxy('Fe2O3').append((3/2)*nCat('Fe2O3')[x])
-        totalNOxy += (3/2)*nCat('Fe2O3')[x]
+        nOxy('Fe2O3').append((3/2)*atmU('Fe2O3')[x])
+        totalNOxy += (3/2)*atmU('Fe2O3')[x]
 
         nOxy('Total').append(totalNOxy)
 
+
+        
+
 #Calculo para diagramas
-        diag('XMg').append(nCat('MgO')/(nCat('MgO')+nCat('FeO')+nCat('MnO')+nCat('CaO')))
-        diag('XFe').append(nCat('XFe')/(nCat('MgO')+nCat('FeO')+nCat('MnO')+nCat('CaO')))
-        diag('XMn').append(nCat('XMn')/(nCat('MgO')+nCat('FeO')+nCat('MnO')+nCat('CaO')))
-        diag('XCa').append(nCat('XCa')/(nCat('MgO')+nCat('FeO')+nCat('MnO')+nCat('CaO')))
+        diag('XMg').append(nCat('MgO')[x]/(nCat('MgO')[x]+nCat('FeO')[x]+nCat('MnO')[x]+nCat('CaO')[x]))
+        diag('XFe').append(nCat('XFe')[x]/(nCat('MgO')[x]+nCat('FeO')[x]+nCat('MnO')[x]+nCat('CaO')[x]))
+        diag('XMn').append(nCat('XMn')[x]/(nCat('MgO')[x]+nCat('FeO')[x]+nCat('MnO')[x]+nCat('CaO')[x]))
+        diag('XCa').append(nCat('XCa')[x]/(nCat('MgO')[x]+nCat('FeO')[x]+nCat('MnO')[x]+nCat('CaO')[x]))
 
 #triplot Morton Mange
         triplot('XMg').append(100*diag('XMg')[x])
